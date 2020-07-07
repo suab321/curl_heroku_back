@@ -53,7 +53,7 @@ router.get('/:image_id',(req,res)=>{
             res.status(400).json(err);
         }
         else{
-            gfs.createReadStream.pipe(res);
+            gfs.createReadStream(req.params.filename).pipe(res);
         }
     })
 })
