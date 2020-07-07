@@ -7,7 +7,7 @@ const Grid=require('gridfs-stream');
 const mongoose = require('mongoose');
 const router = require('express').Router();
 
-mongoose.connect(process.env.database_url,(err)=>{
+mongoose.connect(process.env.database_url,{useNewUrlParser:true,useCreateIndex:true},(err)=>{
     if(err)
         console.error(err);
 });
