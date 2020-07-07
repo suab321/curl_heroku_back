@@ -47,7 +47,15 @@ const User = mongoose.model("User", UserSchema);
 const Sudoku = mongoose.model("Sudoku", SudokuSchema);
 
 router.get('/:image_id',(req,res)=>{
-    gfs.createReadStream(req.params.image_id).pipe(res);
+    gfs.files.findOne({filename:req.params.image_id},(err,data)=>{
+        if(err){
+            console.log(err);
+            res.status(400).json(err);
+        }
+        else{
+            gfs.createReadStream.pipe(res);
+        }
+    })
 })
 
 module.exports={
