@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const passport = require('passport');
 const google = require('passport-google-oauth20').Strategy;
 
@@ -17,7 +19,7 @@ passport.deserializeUser(async(id,done)=>{
 passport.use(new google({
     clientID:process.env.client_id,
     clientSecret:process.env.client_secret,
-    callbackURL:`http://localhost:3002/authentication/google_redirect`
+    callbackURL:`${process.env.back_url}/authentication/google_redirect`
 },
 async function(accessToken, refreshToken, profile, done){
     if(profile){
