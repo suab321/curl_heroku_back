@@ -10,8 +10,10 @@ const passport = require("passport");
 
 
 const {streamRoute} = require('./DataBase/db');
+const {createToken} = require('./JWT/jwt')
 const {authentication} = require('./authentication/route');
 const {api} = require("./user_route/route");
+const {logReg} = require('./authentication/login_register');
 require('./authentication/config');
 
 const app = express();
@@ -44,8 +46,25 @@ app.use(passport.session());
 
 app.use("/authentication", authentication);
 app.use("/api", api);
-app.use("/stream", streamRoute)
+app.use("/stream", streamRoute);
+app.use("/auth", logReg);
 
+
+app.get('/get', async(req,res)=>{
+    console.log(req.session.user);
+    if(req.session.user === undefined || req.session.user === null)
+        res.status(400).json({});
+    else{
+        try{
+            const token = await createToken(req.session.user);
+            res.status(200).json(token);
+        }catch(err){
+            console.log(err);
+            res.status(400).json(err);
+        }
+    }
+        
+});
 
 
 app.listen(process.env.PORT || 3002);

@@ -19,21 +19,22 @@ passport.deserializeUser(async(id,done)=>{
 passport.use(new google({
     clientID:process.env.client_id,
     clientSecret:process.env.client_secret,
-    callbackURL:`http://warm-sierra-48648.herokuapp.com/authentication/google_redirect`
+    callbackURL:`http://localhost:3002/authentication/google_redirect`
 },
 async function(accessToken, refreshToken, profile, done){
     if(profile){
-        // console.log(profile);
+        console.log(profile);
         const user = await User.findOne({social_Id:profile.id});
         if(user === null){
             const user = new User;
+            user.email = profile.emails[0].value;
             user.name = profile.displayName;
             user.social_Id = profile.id;
             try{
                 const res = await user.save();
                 done(null, res);
             }catch(err){
-                done(err,null);
+                done(null,null);
             }
         }
         else

@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const {User,Sudoku,uploadEngine} = require('../DataBase/db');
-const {decodeToken, createToken} = require('../JWT/jwt');
+const {decodeToken} = require('../JWT/jwt');
 const bcrypt = require('bcrypt');
 
 
@@ -22,35 +22,6 @@ async function verify_token(req,res,next){
     }
 }
 
-router.post('/regsiter', async(req,res)=>{
-    const db = new User;
-    db.email = req.body.email;
-    db.password = req.body.password;
-    try{
-        const data = await db.save();
-        req.session.user = data;
-        res.status(200).json("ok");
-    }catch(err){
-        console.log(err);
-        res.status(400).json(err);
-    }
-})
-
-router.get('/get', async(req,res)=>{
-    console.log(req.session.user);
-    if(req.session.user === undefined || req.session.user === null)
-        res.status(400).json({});
-    else{
-        try{
-            const token = await createToken(req.session.user);
-            res.status(200).json(token);
-        }catch(err){
-            console.log(err);
-            res.status(400).json(err);
-        }
-    }
-        
-});
 router.get("/logout",(req,res)=>{
     console.log(req.session.user);
     if(req.session.user !== undefined || req.session.user !== null)

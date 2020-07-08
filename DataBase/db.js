@@ -28,7 +28,7 @@ const upload=multer({storage}).single('file');
 
 const UserSchema = new mongoose.Schema({
     name:String,
-    email:{type:String,default:""},
+    email:{type:String,unique:true},
     password:{type:String, default:""},
     score:{type:Number,default:0},
     dailyStreak:{type:Number,default:0},
